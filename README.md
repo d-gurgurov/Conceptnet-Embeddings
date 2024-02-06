@@ -5,21 +5,21 @@
 This application focuses on extracting data from ConceptNet for a specific language, saving the data into a JSON file, building PPMI embeddings from this data, and retrofitting additional GloVe embeddings (if provided) using the ConceptNet PPMI embeddings.
 
 ## Project Structure
-├── LICENSE
+    ├── LICENSE
 
-├── README.md
+    ├── README.md
 
-├── extract_data.sh
+    ├── extract_data.sh
 
-└── modules
+    └── modules
 
-    ├── data_fetcher.py
+        ├── data_fetcher.py
 
-    ├── embs_retrofitter.py
+        ├── embs_retrofitter.py
 
-    ├── main.py
+        ├── main.py
 
-    └── ppmi_generator.py
+        └── ppmi_generator.py
 
 
 ## Usage
