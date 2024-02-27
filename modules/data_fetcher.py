@@ -32,24 +32,32 @@ class DataFetcher:
         limit = 1000
         extracted_words = []
 
-        for iteration in range(10):
+        for iteration in range(100):
             offset = iteration * limit
             start_url = f"https://api.conceptnet.io/query?start=/c/{self.language}&offset={offset}&limit={limit}"
             response = requests.get(start_url)
-            data = response.json()
 
-            for edge in data['edges']:
-                start_node = edge['start']
-                end_node = edge['end']
+            if response.status_code == 200:
+                try:
+                    data = response.json()
 
-                if 'language' in start_node and start_node['language'] == self.language:
-                    extracted_words.append(start_node['term'])
+                    for edge in data['edges']:
+                        start_node = edge['start']
+                        end_node = edge['end']
 
-                if 'language' in end_node and end_node['language'] == self.language:
-                    extracted_words.append(end_node['term'])
+                        if 'language' in start_node and start_node['language'] == self.language:
+                            extracted_words.append(start_node['term'])
 
-            if 'view' in data and 'nextPage' not in data['view']:
-                break
+                        if 'language' in end_node and end_node['language'] == self.language:
+                            extracted_words.append(end_node['term'])
+
+                    if 'view' in data and 'nextPage' not in data['view']:
+                        break
+                except requests.exceptions.JSONDecodeError as e:
+                    print(f"Error decoding JSON in iteration {iteration}: {e}")
+                    continue  # Skip to the next iteration
+            else:
+                print(f"Error in iteration {iteration}: {response.status_code}")
 
         extracted_words = set(extracted_words)
         extracted_words = list(extracted_words)
